@@ -25,3 +25,7 @@ php bin/magento setup:upgrade && php bin/magento setup:di:compile
   - Follow the [Installation Guide](https://github.com/bentideswell/magento2-wordpress-integration/) for the FishPig Wordpress integration module (you do not need to install another WordPress instance).
   - When configuring the module, choose **Yes** for the **Bedrock Installation?** option. 
   - Configure the **Bedrock Path** option to point to the root of your Bedrock installation.
+
+## Issues
+
+This module has only been created to suit my needs (basic WordPress installation with no frills) and has not been tested with the other great [add-ons offered by FishPig](https://fishpig.co.uk/magento-2/wordpress-integration/add-ons/). Please feel free to add issues and contribute to the project. 
