@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="wordpress" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="setup" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="enabled">
+                    <comment>Enable FishPig WordPress Integration?</comment>
+                </field>
+                <field id="bedrock_enabled" translate="label" type="select" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Bedrock Installation?</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[Does the WordPress installation use <a href="https://roots.io/bedrock/" target="_blank">Bedrock WordPress boilerplate</a>?]]></comment>
+                </field>
+                <field id="path">
+                    <depends>
+                        <field id="*/*/bedrock_enabled">0</field>
+                    </depends>
+                </field>
+                <field id="bedrock_path" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Bedrock Path</label>
+                    <comment>Enter the absolute path to your Bedrock installation.</comment>
+                    <depends>
+                        <field id="*/*/bedrock_enabled">1</field>
+                    </depends>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
