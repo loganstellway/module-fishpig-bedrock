@@ -9,9 +9,9 @@ Install module with [Composer](https://getcomposer.org/):
 composer require loganstellway/module-fishpig-bedrock
 ```
 
-Enable Module:
+Enable Modules:
 ```
-php bin/magento module:enable LoganStellway_FishPigBedrock
+php bin/magento module:enable FishPig_WordPress LoganStellway_FishPigBedrock
 ```
 
 Upgrade / compile Magento:
