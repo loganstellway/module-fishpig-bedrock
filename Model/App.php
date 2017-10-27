@@ -3,6 +3,11 @@
 namespace LoganStellway\FishPigBedrock\Model;
 
 /**
+ * Dependencies
+ */
+use \FishPig\WordPress\Model\App\Integration\Exception as IntegrationException;
+
+/**
  * App
  */
 class App extends \FishPig\WordPress\Model\App
@@ -51,8 +56,8 @@ class App extends \FishPig\WordPress\Model\App
      */
     public function getPath()
     {
-        if (!is_null($this->_path)) {
-            return $this->_path;
+        if (!is_null($this->path)) {
+            return $this->path;
         }
 
         if ($this->getBedrockEnabled()) {
@@ -69,7 +74,7 @@ class App extends \FishPig\WordPress\Model\App
      */
     public function getWpConfigValue($key = null)
     {
-        if (is_null($this->_wpconfig) && $this->getBedrockEnabled()) {
+        if (is_null($this->wpconfig) && $this->getBedrockEnabled()) {
             $env = new \Dotenv\Dotenv(
                 trim($this->getPath())
             );
@@ -78,11 +83,11 @@ class App extends \FishPig\WordPress\Model\App
             if (! empty($_ENV)) {
                 $_ENV['DB_HOST'] = isset($_ENV['DB_HOST']) ? $_ENV['DB_HOST'] : 'localhost';
                 $_ENV['DB_TABLE_PREFIX'] = isset($_ENV['DB_PREFIX']) ? $_ENV['DB_PREFIX'] : 'wp_';
-                $this->_wpconfig = $_ENV;
+                $this->wpconfig = $_ENV;
             }
         }
 
-        // throw new \Exception('getWpConfigValue() => ' . print_r($this->_wpconfig, 1));
+        // throw new \Exception('getWpConfigValue() => ' . print_r($this->wpconfig, 1));
 
         return parent::getWpConfigValue($key);
     }
@@ -98,22 +103,22 @@ class App extends \FishPig\WordPress\Model\App
             return parent::_validateIntegration();
         }
 
-        $magentoUrl = $this->_wpUrlBuilder->getMagentoUrl();
+        $magentoUrl = $this->wpUrlBuilder->getMagentoUrl();
 
         if ($this->isRoot()) {
-            if ($this->_wpUrlBuilder->getHomeUrl() !== $magentoUrl) {
+            if ($this->wpUrlBuilder->getHomeUrl() !== $magentoUrl) {
                 IntegrationException::throwException(
                     sprintf('Your home URL is incorrect and should match your Magento URL. Change to. %s', $magentoUrl)
                 );
             }
         } else {
-            if (strpos($this->_wpUrlBuilder->getHomeUrl(), $magentoUrl) !== 0) {
+            if (strpos($this->wpUrlBuilder->getHomeUrl(), $magentoUrl) !== 0) {
                 IntegrationException::throwException(
-                    sprintf('Your home URL (%s) is invalid as it does not start with the Magento base URL (%s).', $this->_wpUrlBuilder->getHomeUrl(), $magentoUrl)
+                    sprintf('Your home URL (%s) is invalid as it does not start with the Magento base URL (%s).', $this->wpUrlBuilder->getHomeUrl(), $magentoUrl)
                 );
             }
             
-            if ($this->_wpUrlBuilder->getHomeUrl() === $magentoUrl) {
+            if ($this->wpUrlBuilder->getHomeUrl() === $magentoUrl) {
                 IntegrationException::throwException('Your WordPress Home URL matches your Magento URL. Try changing your Home URL to something like ' . $magentoUrl . '/blog');
             }
         }
