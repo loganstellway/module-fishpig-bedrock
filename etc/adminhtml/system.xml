@@ -23,7 +23,7 @@
                         <field id="*/*/bedrock_enabled">1</field>
                     </depends>
                 </field>
-                <field id="bedrock_env" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" default="ksdjk">
+                <field id="bedrock_env" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Bedrock Env File Path</label>
                     <comment>(Optional) Enter the absolute path to your .env from the project root if you're using a custom file name.</comment>
                     <depends>
