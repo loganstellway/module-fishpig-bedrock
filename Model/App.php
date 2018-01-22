@@ -19,7 +19,7 @@ class App extends \FishPig\WordPress\Model\App
 
     /**
      * Dependency Injection
-     * 
+     *
      * @param \FishPig\WordPress\Model\Config                 $config
      * @param \FishPig\WordPress\Model\App\ResourceConnection $resourceConnection
      * @param \FishPig\WordPress\Model\App\Url                $urlBuilder
@@ -46,6 +46,7 @@ class App extends \FishPig\WordPress\Model\App
         if (is_null($this->_isBedrock)) {
             $this->_isBedrock = (bool) $this->getConfig()->getStoreConfigValue('wordpress/setup/bedrock_enabled');
         }
+
         return $this->_isBedrock;
     }
 
@@ -56,6 +57,12 @@ class App extends \FishPig\WordPress\Model\App
      */
     public function getPath()
     {
+        $env = $this->getConfig()->getStoreConfigValue('wordpress/setup/bedrock_env');
+
+        if (! empty($env)) {
+            return realpath('../');
+        }
+
         if (!is_null($this->path)) {
             return $this->path;
         }
@@ -63,7 +70,24 @@ class App extends \FishPig\WordPress\Model\App
         if ($this->getBedrockEnabled()) {
             return $this->getConfig()->getStoreConfigValue('wordpress/setup/bedrock_path');
         }
+
         return parent::getPath();
+    }
+
+    /**
+     * Get the filename of the env file
+     *
+     * @return string
+     */
+    public function getEnvFile()
+    {
+        $env = $this->getConfig()->getStoreConfigValue('wordpress/setup/bedrock_env');
+
+        if (! empty($env)) {
+            return $env;
+        }
+
+        return '.env';
     }
 
     /**
@@ -76,8 +100,9 @@ class App extends \FishPig\WordPress\Model\App
     {
         if (is_null($this->wpconfig) && $this->getBedrockEnabled()) {
             $env = new \Dotenv\Dotenv(
-                trim($this->getPath())
+                $this->getPath(), $this->getEnvFile()
             );
+
             $env = $env->load();
 
             if (! empty($_ENV)) {
@@ -117,12 +142,12 @@ class App extends \FishPig\WordPress\Model\App
                     sprintf('Your home URL (%s) is invalid as it does not start with the Magento base URL (%s).', $this->wpUrlBuilder->getHomeUrl(), $magentoUrl)
                 );
             }
-            
+
             if ($this->wpUrlBuilder->getHomeUrl() === $magentoUrl) {
                 IntegrationException::throwException('Your WordPress Home URL matches your Magento URL. Try changing your Home URL to something like ' . $magentoUrl . '/blog');
             }
         }
-        
+
         return $this;
     }
 }
