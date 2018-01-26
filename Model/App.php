@@ -57,12 +57,6 @@ class App extends \FishPig\WordPress\Model\App
      */
     public function getPath()
     {
-        $env = $this->getConfig()->getStoreConfigValue('wordpress/setup/bedrock_env');
-
-        if (! empty($env)) {
-            return realpath('../');
-        }
-
         if (!is_null($this->path)) {
             return $this->path;
         }
@@ -99,8 +93,11 @@ class App extends \FishPig\WordPress\Model\App
     public function getWpConfigValue($key = null)
     {
         if (is_null($this->wpconfig) && $this->getBedrockEnabled()) {
+            $fullEnvPath = realpath(rtrim($this->getPath(), '/') . '/' . ltrim($this->getEnvFile()));
+            $fullEnvPathInfo = pathinfo($fullEnvPath);
+
             $env = new \Dotenv\Dotenv(
-                $this->getPath(), $this->getEnvFile()
+                $fullEnvPathInfo['dirname'], $fullEnvPathInfo['basename']
             );
 
             $env = $env->load();
